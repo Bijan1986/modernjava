@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
 
@@ -55,6 +56,12 @@ public class Streams {
         System.out.println("MAPPING");
         System.out.println("============================================");
         menu.stream().map(Dish::getName).toList().forEach(System.out::println);
+
+        Stream.iterate(0, n -> n + 2)
+                .limit(10)
+                .forEach(System.out::println);
+
+
 
     }
 }
