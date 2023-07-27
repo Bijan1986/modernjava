@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.joining;
 
 public class Streams {
     public static void main(String[] args) {
@@ -60,6 +61,8 @@ public class Streams {
         Stream.iterate(0, n -> n + 2)
                 .limit(10)
                 .forEach(System.out::println);
+
+        System.out.println(menu.stream().map(Dish::getName).collect(joining(" ,")));
 
 
 

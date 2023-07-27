@@ -60,3 +60,87 @@ Streams can be created not only from a collection but also from values, arrays, 
 An infinite stream has an infinite number of elements (for example all possible strings). <br>
 This is possible because the elements of a stream are only produced on demand. <br>
 You can get a finite stream from an infinite stream using methods such as limit.
+
+
+## Collecting data with streams
+
+### collect transactions based on currency
+
+```
+var currencyAndTransaction = transactions.stream().collect(groupingBy(Transaction::getCurrency));
+        System.out.println(currencyAndTransaction);
+```
+
+This will give you the output as 
+
+```
+{
+EUR=[Transaction(currency=EUR, value=1500.0), Transaction(currency=EUR, value=1100.0), Transaction(currency=EUR, value=5600.0), Transaction(currency=EUR, value=6800.0)], 
+JPY=[Transaction(currency=JPY, value=7800.0), Transaction(currency=JPY, value=5700.0)], 
+USD=[Transaction(currency=USD, value=2300.0), Transaction(currency=USD, value=4500.0), Transaction(currency=USD, value=4600.0)], 
+GBP=[Transaction(currency=GBP, value=9900.0), Transaction(currency=GBP, value=3200.0)], 
+CHF=[Transaction(currency=CHF, value=6700.0), Transaction(currency=CHF, value=3400.0)]
+}
+
+```
+
+
+### Finding maximum and minimum in a stream of values
+
+```text
+Comparator<Dish> dishCaloriesComparator =
+    Comparator.comparingInt(Dish::getCalories);
+Optional<Dish> mostCalorieDish =
+    menu.stream()
+        .collect(maxBy(dishCaloriesComparator));
+```
+
+### Summing and summerizing
+
+
+```text
+int totalCalories = menu.stream().collect(summingInt(Dish::getCalories));
+
+double avgCalories =
+    menu.stream().collect(averagingInt(Dish::getCalories));
+```
+
+> This is really cool. for an example if I want to get a summary based on calories then
+> I can do this
+
+```text
+var sumDouble = transactions.stream().collect(summarizingDouble(Transaction::getValue));
+        System.out.println(sumDouble);
+```
+
+Then the output will be 
+
+```text
+DoubleSummaryStatistics
+{
+count=13, 
+sum=63100.000000, 
+min=1100.000000, 
+average=4853.846154, 
+max=9900.000000
+}
+```
+
+### Joining Strings
+
+```text
+String shortMenu = menu.stream().collect(joining());
+
+output:
+
+porkbeefchickenfrench friesriceseason fruitpizzaprawnssalmon
+
+// better way to add comma
+
+String shortMenu = menu.stream().map(Dish::getName).collect(joining(", "));
+
+Output:
+pork, beef, chicken, french fries, rice, season fruit, pizza, prawns, salmon
+
+
+```
