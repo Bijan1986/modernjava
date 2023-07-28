@@ -162,3 +162,92 @@ output:
 
 Optional[Dish(name=pork, vegetarian=false, calories=800, type=MEAT)]
 ```
+
+### Grouping by
+
+```text
+customized grouping by
+
+public enum CaloricLevel { DIET, NORMAL, FAT }
+Map<CaloricLevel, List<Dish>> dishesByCaloricLevel = menu.stream().collect(
+         groupingBy(dish -> {
+                if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+                else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+                else return CaloricLevel.FAT;
+         } ));
+         
+         
+ // if you want to filter dishes > 500 calories and group them based on type
+Map<Dish.Type, List<Dish>> caloricDishesByType =
+      menu.stream()
+          .collect(groupingBy(Dish::getType,
+                   filtering(dish -> dish.getCalories() > 500, toList())));
+                   
+output:
+
+{OTHER=[french fries, pizza], MEAT=[pork, beef], FISH=[]}
+
+// just like filtering there is also mapping function
+
+Map<Dish.Type, List<String>> dishNamesByType =
+      menu.stream()
+          .collect(groupingBy(Dish::getType,
+                   mapping(Dish::getName, toList())));
+                   
+// very interesting
+
+        Map<String, List<String>> dishTags = new HashMap<>();
+        dishTags.put("pork", asList("greasy", "salty"));
+        dishTags.put("beef", asList("salty", "roasted"));
+        dishTags.put("chicken", asList("fried", "crisp"));
+        dishTags.put("french fries", asList("greasy", "fried"));
+        dishTags.put("rice", asList("light", "natural"));
+        dishTags.put("season fruit", asList("fresh", "natural"));
+        dishTags.put("pizza", asList("tasty", "salty"));
+        dishTags.put("prawns", asList("tasty", "roasted"));
+        dishTags.put("salmon", asList("delicious", "fresh"));
+
+Map<Dish.Type, Set<String>> dishNamesByType =
+                menu.stream()
+                        .collect(groupingBy(Dish::getType,
+                                flatMapping(dish -> dishTags.get( dish.getName() ).stream(),
+                                        toSet())));
+
+output:
+
+{FISH=[roasted, tasty, fresh, delicious], OTHER=[salty, greasy, natural, light, tasty, fresh, fried], MEAT=[salty, greasy, roasted, fried, crisp]}
+         
+```
+
+#### multilevel grouping
+
+```text
+This is a better example of multilevel grouping
+
+Person person1 = new Person("John", "USA", "NYC", new Pet("Max", 5));
+    Person person2 = new Person("Steve", "UK", "London", new Pet("Lucy", 8));
+    Person person3 = new Person("Anna", "USA", "NYC", new Pet("Buddy", 12));
+    Person person4 = new Person("Mike", "USA", "Chicago", new Pet("Duke", 10));
+     
+    List<Person> persons = Arrays.asList(person1, person2, person3, person4);
+    
+    now if i want to group people based on country and city 
+    
+    persons.stream().collect(
+         groupingBy(Person::getCountry,
+            groupingBy(Person::getCity)
+
+the other example is 
+
+Map<Dish.Type, Map<CaloricLevel, List<Dish>>> dishesByTypeCaloricLevel =
+menu.stream().collect(
+      groupingBy(Dish::getType,
+         groupingBy(dish -> {
+                if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+                else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+                else return CaloricLevel.FAT;
+          } )
+      )
+);
+
+```
