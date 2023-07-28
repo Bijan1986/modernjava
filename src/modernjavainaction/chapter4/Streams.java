@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.reducing;
 
 public class Streams {
     public static void main(String[] args) {
@@ -63,7 +64,9 @@ public class Streams {
                 .forEach(System.out::println);
 
         System.out.println(menu.stream().map(Dish::getName).collect(joining(" ,")));
-
+        var sumofCalories = menu.stream().collect(reducing(0,Dish::getCalories,Integer::sum));
+        System.out.println(sumofCalories);
+        System.out.println(menu.stream().collect(reducing((dish1, dish2) -> dish1.getCalories()> dish2.getCalories()?dish1:dish2)));
 
 
     }

@@ -62,7 +62,7 @@ This is possible because the elements of a stream are only produced on demand. <
 You can get a finite stream from an infinite stream using methods such as limit.
 
 
-## Collecting data with streams
+## Chapter 6: Collecting data with streams
 
 ### collect transactions based on currency
 
@@ -143,4 +143,22 @@ Output:
 pork, beef, chicken, french fries, rice, season fruit, pizza, prawns, salmon
 
 
+```
+
+### Generalised Summerization with reduction 
+
+```text
+To get sum of all calories: 
+
+var sumofCalories = menu.stream().collect(reducing(0,Dish::getCalories,Integer::sum));
+
+output: 4200
+
+To get the dish with maximum calorie
+
+menu.stream().collect(reducing((dish1, dish2) -> dish1.getCalories()> dish2.getCalories()?dish1:dish2))
+
+output:
+
+Optional[Dish(name=pork, vegetarian=false, calories=800, type=MEAT)]
 ```
