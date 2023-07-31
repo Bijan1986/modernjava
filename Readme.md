@@ -251,3 +251,48 @@ menu.stream().collect(
 );
 
 ```
+
+### Partitioning
+
+```text
+in partitioning by we can get both true and false values
+
+Map<Boolean, List<Dish>> partitionedMenu =
+             menu.stream().collect(partitioningBy(Dish::isVegetarian));
+             
+output will be:
+
+{false=[pork, beef, chicken, prawns, salmon],
+ true=[french fries, rice, season fruit, pizza]}
+ 
+```
+
+#### Advantages of partitioning over groupBy
+
+```text
+Map<Boolean, Map<Dish.Type, List<Dish>>> vegetarianDishesByType =
+menu.stream().collect(
+        partitioningBy(Dish::isVegetarian,
+                       groupingBy(Dish::getType)));
+
+output:
+
+{false={FISH=[prawns, salmon], MEAT=[pork, beef, chicken]},
+ true={OTHER=[french fries, rice, season fruit, pizza]}}
+
+
+Multilevel partitioning by
+
+menu.stream().collect(partitioningBy(Dish::isVegetarian,
+                          partitioningBy(d -> d.getCalories() > 500)));
+
+
+output: 
+
+        { false={false=[chicken, prawns, salmon], true=[pork, beef]},
+          true={false=[rice, season fruit], true=[french fries, pizza]}}
+
+```
+
+### Collector interface
+
