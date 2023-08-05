@@ -296,3 +296,113 @@ output:
 
 ### Collector interface
 
+This needs more time.
+
+## Chapter 7: Parallel data processing and performance
+
+### Parallel Streams :
+
+## Chapter 8: Collection API enhancements
+
+### List Factory
+
+```text
+
+List<String> friends = List.of("Raphael", "Olivia", "Thibaut");
+System.out.println(friends);
+
+```
+
+### Set Factory
+
+```text
+Set<String> friends = Set.of("Raphael", "Olivia", "Thibaut");
+System.out.println(friends);
+
+```
+
+### Map factory
+
+```text
+Map<String, Integer> ageOfFriends
+   = Map.of("Raphael", 30, "Olivia", 25, "Thibaut", 26);
+System.out.println(ageOfFriends);
+
+```
+
+## Working with List and Set
+
+Few methods created in java 8
+
+1. removeIf : removes element matching predicate. it is for all List and set
+2. replaceAll
+3. sort
+
+
+### removeIf:
+
+```text
+transactions.removeIf(transaction ->
+     Character.isDigit(transaction.getReferenceCode().charAt(0)));
+```
+
+## Working with Map
+
+### forEach
+
+```text
+ageOfFriends.forEach((friend, age) -> System.out.println(friend + " is " +
+     age + " years old"));
+     
+```
+
+### Sorting
+
+> Entry.comparingByKey
+> 
+> Entry.comparingByValue
+> 
+
+```text
+
+Map<String, String> favouriteMovies
+       = Map.ofEntries(entry("Raphael", "Star Wars"),
+       entry("Cristina", "Matrix"),
+       entry("Olivia",
+       "James Bond"));
+
+favouriteMovies
+  .entrySet()
+  .stream()
+  .sorted(Entry.comparingByKey())
+  .forEachOrdered(System.out::println);
+
+```
+
+
+### getOrDefault
+
+This is to avoid null pointer exception
+
+```text
+Map<String, String> favouriteMovies
+       = Map.ofEntries(entry("Raphael", "Star Wars"),
+       entry("Olivia", "James Bond"));
+
+System.out.println(favouriteMovies.getOrDefault("Olivia", "Matrix"));
+System.out.println(favouriteMovies.getOrDefault("Thibaut", "Matrix"));
+
+```
+movies.entrySet().removeIf(entry -> entry.getValue() < 10);
+
+## Summary
+
+```text
+Summary
+Java 9 supports collection factories, which let you create small immutable lists, sets, and maps by using List.of, Set.of, Map.of, and Map.ofEntries.
+The objects returned by these collection factories are immutable, which means that you can’t change their state after creation.
+The List interface supports the default methods removeIf, replaceAll, and sort.
+The Set interface supports the default method removeIf.
+The Map interface includes several new default methods for common patterns and reduces the scope for bugs.
+ConcurrentHashMap supports the new default methods inherited from Map but provides thread-safe implementations for them.
+```
