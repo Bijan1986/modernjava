@@ -406,3 +406,56 @@ The Set interface supports the default method removeIf.
 The Map interface includes several new default methods for common patterns and reduces the scope for bugs.
 ConcurrentHashMap supports the new default methods inherited from Map but provides thread-safe implementations for them.
 ```
+
+## Chapter 10: Domain Specific Language Using Lambdas
+
+### Using comparator
+
+```text
+Suppose that you have a list of objects representing people (Persons), 
+and you want to sort these objects based on the people’s ages
+```
+
+> **Collections.sort(people, (p1, p2) -> p1.getAge() - p2.getAge());**
+
+```text
+This can also be replaced/refined more in to 
+```
+
+> **Collections.sort(persons, comparing(p -> p.getAge()));**
+> 
+>  and then to 
+> 
+> **Collections.sort(persons, comparing(Person::getAge));**
+> 
+
+
+```text
+If you want to sort the people by age, but in reverse order, 
+
+you can exploit the instance method reverse 
+```
+> **Collections.sort(persons, comparing(Person::getAge).reverse());**
+> 
+
+```text
+if you want the people of the same age to be sorted alphabetically, 
+you can compose that Comparator with one that performs the comparison on the names:
+```
+
+
+> **Collections.sort(persons, comparing(Person::getAge)
+.thenComparing(Person::getName));**
+> 
+> and then it can be refined further to 
+> 
+> **persons.sort(comparing(Person::getAge)
+.thenComparing(Person::getName));**
+> 
+> 
+
+#### groupOn() in collector
+
+> Collector<? super Car, ?, Map<Brand, Map<Color, List<Car>>>>
+carGroupingCollector =
+**groupOn(Car::getColor).after(Car::getBrand).get()**
